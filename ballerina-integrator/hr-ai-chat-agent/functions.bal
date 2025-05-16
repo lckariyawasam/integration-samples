@@ -22,11 +22,12 @@ final string embedding = "text-embed";
 
 vector:QueryRequest queryRequest = {
     topK: 4,
-    includeMetadata: true
+    includeMetadata: true,
+    namespace: "ai"
 };
 
 public type Metadata record {
-    string text;
+    string text_segment;
 };
 
 public type ChatResponseChoice record {|
@@ -69,7 +70,7 @@ isolated function augment(vector:QueryMatch[] matches) returns string|error {
     string context = "";
     foreach vector:QueryMatch data in matches {
         Metadata metadata = check data.metadata.cloneWithType();
-        context = context.concat(metadata.text);
+        context = context.concat(metadata.text_segment);
     }
     return context;
 }
